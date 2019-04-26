@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: back
+spec:
+  ports:
+  - port: 6000
+  selector:
+    app: course-back
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-back
+spec:
+  selector:
+    matchLabels:
+      app: course-back
+  replicas: 3 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: course-back
+    spec:
+      containers:
+      - name: back-py
+        image: danielesiddi/course-back
+        ports:
+        - containerPort: 6000
+        env:
+          # Use secret in real usage
+        - name: MYSQL_DATABASE_HOST
+          value: db
+        - name: MYSQL_DATABASE_USER
+          value: root
+        - name: MYSQL_DATABASE_PASSWORD
+          value: K4ir0s
+
